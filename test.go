@@ -32,8 +32,12 @@ func init() {
 	meethueOauthConfig = &oauth2.Config{
 		RedirectURL:  "callback-url-here",
 		ClientID:     "client-id-here",
-		ClientSecret: "3pHLwaYhWS5DTx2B",
-		Endpoint:     oauth2.Endpoint{AuthURL: "https://domain here/v2/oauth2/authorize", TokenURL: "https://domain here/v2/oauth2/token"},
+		ClientSecret: "client-secret-here",
+		Endpoint:     oauth2.Endpoint{
+			AuthURL: "https://<<your_domain_url>>/authorize",
+			TokenURL: "https://<your_domain_url>>/token",
+			AuthStyle: oauth2.AuthStyleInHeader,
+		},
 	}
 }
 
@@ -44,10 +48,11 @@ func main() {
 	fmt.Println(http.ListenAndServe(":8080", nil))
 }
 
+//Navigate to localhost:8080/login
 func handleMain(w http.ResponseWriter, r *http.Request) {
 	var htmlIndex = `<html>
 <body>
-	<a href="/login">Meethue Log In</a>
+	<a href="/login"> get your authorization page</a>
 </body>
 </html>`
 
@@ -86,6 +91,7 @@ func getToken(state string, code string) (oauth2.Token, error) {
 }
 
 //Code verifier
+//change values for testing
 const (
 	DefaultLength = 43
 	MinLength     = 43
